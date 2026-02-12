@@ -98,8 +98,12 @@ class _LoginScreenTestState extends State<LoginScreenTest> {
 
                       // Call login and wait for it to finish
                       await context.read<LoginProviderTest>().login(
-                        userName: 'vseen', // Use your controllers here
-                        password: '123456',
+                        // userName: 'vseen', // Use your controllers here
+                        // password: '123456',
+
+                        userName: 'bittu13', // Use your controllers here
+                        password: '78900',
+
                         // userName: usernameController.text.trim().toString(), // Use your controllers here
                         // password: passwordController.text.trim().toString(),
                       );
