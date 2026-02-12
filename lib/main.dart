@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
  import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
-import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 
+import 'my_new_pattern/provider/contact_provider.dart';
 import 'my_new_pattern/provider/login_provider_test.dart';
-import 'my_new_pattern/provider/tag_list_provider.dart';
-import 'my_new_pattern/ui/TagListScreen.dart';
+ import 'my_new_pattern/ui/contact_list_screen.dart';
 import 'my_new_pattern/ui/login_screen_test.dart';
 
 void main() async {
@@ -33,16 +32,11 @@ class MyApp extends StatelessWidget {
       providers: [
 
         ChangeNotifierProvider(create: (_) => LoginProviderTest()),
-        ChangeNotifierProvider(create: (_) => TagListProvider()),
+        ChangeNotifierProvider(create: (_) => ContactProvider()),
       ],
       child: MaterialApp(
         // theme: ThemeData.dark(),
 
-        builder: (context, child) {
-          return LiquidGlassLayer(
-            child: child!,
-          );
-        },
 
         // home: EnterPage(),
         home: LoginScreenTest(),

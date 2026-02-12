@@ -10,8 +10,12 @@ class NetworkApiServicesDio extends BaseApiServices {
 
   @override
   Future<Response<dynamic>> getApi(String url) async {
+    bool requiresAuth = false;
     try {
-      return await DioClient.dio.get(url);
+      return await DioClient.dio.get(url,
+        options: Options(
+        extra: {'requiresAuth': requiresAuth},
+      ),);
     } on DioException catch (e) {
       throw mapDioError(e);
     }
@@ -19,8 +23,11 @@ class NetworkApiServicesDio extends BaseApiServices {
 
   @override
   Future<Response<dynamic>> getApiWithToken(String url) async {
+    bool requiresAuth = true;
     try {
-      return await DioClient.dio.get(url);
+      return await DioClient.dio.get(url,options: Options(
+        extra: {'requiresAuth': requiresAuth},
+      ),);
     } on DioException catch (e) {
       throw mapDioError(e);
     }
@@ -29,27 +36,32 @@ class NetworkApiServicesDio extends BaseApiServices {
   @override
   Future<Response<dynamic>> postApi(
       Map<String, dynamic> data,
-      String url,
-      ) async {
-    try {
-      return await DioClient.dio.post(
-        url,
-        data: data,
-      );
-    } on DioException catch (e) {
-      throw mapDioError(e);
-    }
+      String url, {
+        bool requiresAuth = false,
+      }) {
+    return DioClient.dio.post(
+      url,
+      data: data,
+      options: Options(
+        extra: {'requiresAuth': requiresAuth},
+      ),
+    );
   }
+
 
   @override
   Future<Response<dynamic>> postApiWithToken(
       Map<String, dynamic> data,
       String url,
       ) async {
+    bool requiresAuth = true;
     try {
       return await DioClient.dio.post(
         url,
         data: data,
+        options: Options(
+          extra: {'requiresAuth': requiresAuth},
+        ),
       );
     } on DioException catch (e) {
       throw mapDioError(e);
