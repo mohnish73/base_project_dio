@@ -36,13 +36,15 @@ class _ContactListScreenState extends State<ContactListScreen> {
         selector: (_, provider) => provider.response,
         builder: (context, response, _) {
 
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (response.status == ApiStatus.error ||
-                response.status == ApiStatus.noInternet ||
-                response.status == ApiStatus.unauthorized) {
-              GlobalDialog.showError(context, response);
-            }
-          });
+          // don't remove this
+
+          // WidgetsBinding.instance.addPostFrameCallback((_) {
+          //   if (response.status == ApiStatus.error ||
+          //       response.status == ApiStatus.noInternet ||
+          //       response.status == ApiStatus.unauthorized) {
+          //     GlobalDialog.showError(context, response);
+          //   }
+          // });
 
           return _buildBody(response);
         },
@@ -56,8 +58,27 @@ class _ContactListScreenState extends State<ContactListScreen> {
       case ApiStatus.loading:
         return const Center(child: CircularProgressIndicator());
 
+      case ApiStatus.noInternet:
+        return _errorView(
+          message: "No internet connection",
+          buttonText: "Retry",
+          onTap: () => context.read<ContactProvider>().contactListApi(),
+        );
+
       case ApiStatus.error:
-        return Center(child: Text(response.message ?? "Error"));
+        return _errorView(
+          message: response.message ?? "Something went wrong",
+          buttonText: "Retry",
+          onTap: () => context.read<ContactProvider>().contactListApi(),
+        );
+
+      case ApiStatus.timeout:
+        return _errorView(
+          message: "Request timeout. Please try again.",
+          buttonText: "Retry",
+          onTap: () => context.read<ContactProvider>().contactListApi(),
+        );
+
 
       case ApiStatus.success:
         final contacts =  response.data?.data?.contactDetails ?? [];
@@ -70,7 +91,6 @@ class _ContactListScreenState extends State<ContactListScreen> {
           itemCount: contacts.length,
           itemBuilder: (context, index) {
             final contact = contacts[index];
-
             return Card(
               margin: const EdgeInsets.symmetric(
                   horizontal: 12, vertical: 6),
@@ -100,5 +120,35 @@ class _ContactListScreenState extends State<ContactListScreen> {
         return const SizedBox();
     }
   }
+
+  Widget _errorView({
+    required String message,
+    required String buttonText,
+    required VoidCallback onTap,
+  }) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.wifi_off, size: 60, color: Colors.grey),
+            const SizedBox(height: 16),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: onTap,
+              child: Text(buttonText),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 }
 

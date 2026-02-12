@@ -37,9 +37,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         // theme: ThemeData.dark(),
 
-
-        // home: EnterPage(),
-        home: LoginScreenTest(),
+        home: ContactListScreen(),
       ),
     );
   }

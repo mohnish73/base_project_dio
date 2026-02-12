@@ -17,10 +17,10 @@ class DioClient {
               final requiresAuth = options.extra['requiresAuth'] ?? true;
 
               if (requiresAuth) {
-           //     final token = HiveService.getToken();
+                // final token = HiveService.getToken();
 
 
-                final token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
+                final token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2c2VlbiIsImlhdCI6MTc3MDg5MzM5NCwiZXhwIjoxNzcwOTkzNTI0fQ.c5UU4xPHqvGrk31rugsZ1hBmLRuHYx4ckr2M4b0IDMeC6V-qx8W3wlgdqskZRTAeBzDhRjmXnLm3HhGE4RWHXw";
 
                 if (token != null && token.isNotEmpty) {
                   options.headers['Authorization'] = 'Bearer $token';
