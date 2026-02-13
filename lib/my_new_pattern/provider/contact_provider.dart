@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:genricclasstry/my_new_pattern/model/all_contact_response.dart';
 import 'package:genricclasstry/my_new_pattern/services/network/response/base_api_handler.dart';
 
+import '../core/storage/hive_service.dart';
 import '../model/login_model.dart';
 import '../repo/contact_repo.dart';
 import '../services/network/response/api_response.dart';
@@ -92,7 +93,7 @@ class ContactProvider extends ChangeNotifier {
       apiCall: () => _api.contactListAPi(
         userId: '',
         // adminUserId: '121',
-        adminUserId: '19',
+        adminUserId: HiveService.getAdminUserId().toString(),
         order: 'desc',
         page: _page.toString(),
         size: _size.toString(),

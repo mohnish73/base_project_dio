@@ -109,8 +109,10 @@ class _ContactListScreenState extends State<ContactListScreen> {
                         CrossAxisAlignment.start,
                         children: [
                           Text("Mobile: ${contact.contactPhoneNumber ?? "-"}"),
-                          Text("Email: ${contact.email ?? "-"}"),
+                          Text("Email: ${contact.email}"),
                           Text("Country: ${contact.country ?? "-"}"),
+                          Text("group: ${contact.groupName }"),
+
                         ],
                       ),
                     ),

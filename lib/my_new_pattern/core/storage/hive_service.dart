@@ -24,16 +24,19 @@ class HiveService {
     required String name,
     required String userId,
     required String userType,
+    required String adminUserId,
   }) {
     final box = _getBox();
     box.put('name', name);
     box.put('userId', userId);
     box.put('userType', userType);
+    box.put('adminUserId', adminUserId);
   }
 
   static String? getName() => _getBox().get('name');
   static String? getUserId() => _getBox().get('userId');
   static String? getUserType() => _getBox().get('userType');
+  static String? getAdminUserId() => _getBox().get('adminUserId');
 
   /// 🧹 Clear everything on logout
   static void clearAll() => _getBox().clear();

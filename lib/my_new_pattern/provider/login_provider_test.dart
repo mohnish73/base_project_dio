@@ -45,6 +45,7 @@ class LoginProviderTest extends ChangeNotifier {
           name: userData.name ?? "User",
           userId: userData.userId ?? "",
           userType: userData.userType ?? "",
+          adminUserId: userData.adminUserId ?? "",
         );
       }
     }
