@@ -2,95 +2,68 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 import 'base_api_services.dart';
-import 'app_exceptions.dart';
 import 'dio_client/dio_clinet.dart';
-import 'dio_client/dio_exception_mapper.dart';
 
+/// Thin network layer — makes raw Dio calls and returns [Response].
+///
+/// No error handling here by design. All [DioException]s bubble up to
+/// [ApiHandler.handle()] which is the single place that maps them to
+/// typed [ApiResponse] values.
 class NetworkApiServicesDio extends BaseApiServices {
+  @override
+  Future<Response<dynamic>> getApi(String url) =>
+      DioClient.dio.get(
+        url,
+        options: Options(extra: {'requiresAuth': false}),
+      );
 
   @override
-  Future<Response<dynamic>> getApi(String url) async {
-    bool requiresAuth = false;
-    try {
-      return await DioClient.dio.get(url,
-        options: Options(
-        extra: {'requiresAuth': requiresAuth},
-      ),);
-    } on DioException catch (e) {
-      throw mapDioError(e);
-    }
-  }
-
-  @override
-  Future<Response<dynamic>> getApiWithToken(String url) async {
-    bool requiresAuth = true;
-    try {
-      return await DioClient.dio.get(url,options: Options(
-        extra: {'requiresAuth': requiresAuth},
-      ),);
-    } on DioException catch (e) {
-      throw mapDioError(e);
-    }
-  }
+  Future<Response<dynamic>> getApiWithToken(String url) =>
+      DioClient.dio.get(
+        url,
+        options: Options(extra: {'requiresAuth': true}),
+      );
 
   @override
   Future<Response<dynamic>> postApi(
-      Map<String, dynamic> data,
-      String url, {
-        bool requiresAuth = false,
-      }) {
-    return DioClient.dio.post(
-      url,
-      data: data,
-      options: Options(
-        extra: {'requiresAuth': requiresAuth},
-      ),
-    );
-  }
-
+    Map<String, dynamic> data,
+    String url, {
+    bool requiresAuth = false,
+  }) =>
+      DioClient.dio.post(
+        url,
+        data: data,
+        options: Options(extra: {'requiresAuth': requiresAuth}),
+      );
 
   @override
   Future<Response<dynamic>> postApiWithToken(
-      Map<String, dynamic> data,
-      String url,
-      ) async {
-    bool requiresAuth = true;
-    try {
-      return await DioClient.dio.post(
+    Map<String, dynamic> data,
+    String url,
+  ) =>
+      DioClient.dio.post(
         url,
         data: data,
-        options: Options(
-          extra: {'requiresAuth': requiresAuth},
-        ),
+        options: Options(extra: {'requiresAuth': true}),
       );
-    } on DioException catch (e) {
-      throw mapDioError(e);
-    }
-  }
 
   @override
-  Future<Response<dynamic>> deleteApiWithToken(String url) async {
-    try {
-      return await DioClient.dio.delete(url);
-    } on DioException catch (e) {
-      throw mapDioError(e);
-    }
-  }
+  Future<Response<dynamic>> deleteApiWithToken(String url) =>
+      DioClient.dio.delete(
+        url,
+        options: Options(extra: {'requiresAuth': true}),
+      );
 
   @override
   Future<Response<dynamic>> patchApiWithToken(
-      Map<String, dynamic> data,
-      String url,
-      ) async {
-    try {
-      return await DioClient.dio.patch(
+    Map<String, dynamic> data,
+    String url,
+  ) =>
+      DioClient.dio.patch(
         url,
         data: data,
+        options: Options(extra: {'requiresAuth': true}),
       );
-    } on DioException catch (e) {
-      throw mapDioError(e);
-    }
-  }
 
   @override
   Future<Response<dynamic>> multipartApi({
@@ -98,20 +71,17 @@ class NetworkApiServicesDio extends BaseApiServices {
     String? url,
     File? profileImg,
   }) async {
-    try {
-      final formData = FormData.fromMap({
-        ...?data,
-        if (profileImg != null)
-          'file': await MultipartFile.fromFile(profileImg.path),
-      });
-
-      return await DioClient.dio.post(
-        url!,
-        data: formData,
-      );
-    } on DioException catch (e) {
-      throw mapDioError(e);
-    }
+    assert(url != null, 'url must not be null for multipartApi');
+    final formData = FormData.fromMap({
+      ...?data,
+      if (profileImg != null)
+        'file': await MultipartFile.fromFile(profileImg.path),
+    });
+    return DioClient.dio.post(
+      url!,
+      data: formData,
+      options: Options(extra: {'requiresAuth': true}),
+    );
   }
 
   @override
@@ -122,23 +92,20 @@ class NetworkApiServicesDio extends BaseApiServices {
     File? aadhaarFile,
     File? panImage,
   }) async {
-    try {
-      final formData = FormData.fromMap({
-        ...?data,
-        if (profileImg != null)
-          'photo': await MultipartFile.fromFile(profileImg.path),
-        if (aadhaarFile != null)
-          'aadharcard_photo': await MultipartFile.fromFile(aadhaarFile.path),
-        if (panImage != null)
-          'pancard_photo': await MultipartFile.fromFile(panImage.path),
-      });
-
-      return await DioClient.dio.post(
-        url!,
-        data: formData,
-      );
-    } on DioException catch (e) {
-      throw mapDioError(e);
-    }
+    assert(url != null, 'url must not be null for multipartApiForPanAndAadhaar');
+    final formData = FormData.fromMap({
+      ...?data,
+      if (profileImg != null)
+        'photo': await MultipartFile.fromFile(profileImg.path),
+      if (aadhaarFile != null)
+        'aadharcard_photo': await MultipartFile.fromFile(aadhaarFile.path),
+      if (panImage != null)
+        'pancard_photo': await MultipartFile.fromFile(panImage.path),
+    });
+    return DioClient.dio.post(
+      url!,
+      data: formData,
+      options: Options(extra: {'requiresAuth': true}),
+    );
   }
 }

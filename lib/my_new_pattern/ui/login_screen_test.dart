@@ -6,7 +6,6 @@ import '../provider/login_provider_test.dart';
 import '../services/network/response/api_response.dart';
 import '../services/network/response/global_error_handle.dart';
 import '../utils/custom_app_botton.dart';
-import '../services/network/response/global_dialog.dart';
 import 'contact_list_screen.dart';
 
 class LoginScreenTest extends StatefulWidget {

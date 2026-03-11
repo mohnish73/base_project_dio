@@ -1,27 +1,32 @@
+/// Base class for all app-level exceptions.
 class AppException implements Exception {
   final String message;
-  AppException(this.message);
+  const AppException(this.message);
 
   @override
   String toString() => message;
 }
 
-class InternetException extends AppException {
-  InternetException() : super('No Internet Connection');
-}
-
 class NoInternetException extends AppException {
-  NoInternetException() : super('No Internet Connection');
+  const NoInternetException() : super('No Internet Connection');
 }
 
 class RequestTimeoutException extends AppException {
-  RequestTimeoutException() : super('Request timed out');
-}
-
-class FetchDataException extends AppException {
-  FetchDataException(String message) : super(message);
+  const RequestTimeoutException() : super('Request timed out');
 }
 
 class UnauthorizedException extends AppException {
-  UnauthorizedException() : super('Unauthorized access');
+  const UnauthorizedException() : super('Unauthorized access');
+}
+
+class ForbiddenException extends AppException {
+  const ForbiddenException() : super('Access forbidden');
+}
+
+class ServerException extends AppException {
+  const ServerException([super.message = 'Server error occurred']);
+}
+
+class FetchDataException extends AppException {
+  const FetchDataException([super.message = 'Failed to fetch data']);
 }
