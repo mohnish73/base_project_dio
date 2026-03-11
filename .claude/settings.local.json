@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /d/mohnishWorkSpace/flutterProjects/genricclasstry/lib -type f -name \"*exception*\" -o -type f -name \"*error*\" -o -type f -name \"*response*\" | grep -E \"\\\\.dart$\")",
+      "Bash(flutter analyze:*)"
+    ]
+  }
+}
