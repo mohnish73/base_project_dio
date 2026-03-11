@@ -7,7 +7,7 @@ import '../app_exceptions.dart';
 /// Single centralized error-handling point for all API calls.
 ///
 /// Usage in providers:
-///   final result = await ApiHandler.handle<MyModel>(
+///   final result = await ApiHandler.handle(
 ///     apiCall: () => _repo.fetchSomething(),
 ///     parser: (json) => MyModel.fromJson(json),
 ///   );
@@ -98,7 +98,6 @@ class ApiHandler {
           return ApiResponse.error("Request was cancelled");
 
         case DioExceptionType.unknown:
-        default:
           return ApiResponse.error("Network error. Please check your connection.");
       }
 
